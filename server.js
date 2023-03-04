@@ -1,4 +1,4 @@
-const http = require("http");
+const WebSocket = require("ws");
 
 const announcements = [
 	// ChatGPT wrote the announcements lol, can't be bothered
@@ -22,14 +22,24 @@ const announcements = [
 	}
 ];
 
-function requestListener(req, res) {
-	console.log("Received request", req);
-	if (req.method === "GET") {
-		res.setHeader("Access-Control-Allow-Origin", "*");
-		res.writeHead(200);
-		res.end(JSON.stringify(announcements))
-	}
-}
+const wss = new WebSocket.Server({port: process.env.PORT || 3000});
 
-const server = http.createServer(requestListener);
-server.listen(process.env.PORT || 3000);
+const clients = new Set();
+
+wss.on("connection", (socket) => {
+	console.log("Client connected");
+	clients.add(socket);
+	socket.on("error", (error) => {
+		console.error(error);
+	});
+	socket.on("close", (code) => {
+		clients.delete(socket);
+		console.log(`Client disconnected (${code})`);
+		socket.close();
+	});
+	socket.on("message", (message) => {
+		const data = JSON.parse(message);
+		console.log("Message", data);
+	});
+	socket.send(JSON.stringify(["announcements", announcements]));
+});

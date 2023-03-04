@@ -10,5 +10,12 @@
   "bugs": {
     "url": "https://github.com/martendo/yrhacks-2023/issues"
   },
-  "homepage": "https://github.com/martendo/yrhacks-2023"
+  "homepage": "https://github.com/martendo/yrhacks-2023",
+  "dependencies": {
+    "ws": "^8.12.1"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^6.0.3"
+  }
 }
