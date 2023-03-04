@@ -1,7 +1,7 @@
 "use strict";
 
-//const WSS_URL = "ws://localhost:3000";
-const WSS_URL = "wss://markham-yrhacks-2023.herokuapp.com";
+const WSS_URL = "ws://localhost:3000";
+// const WSS_URL = "wss://markham-yrhacks-2023.herokuapp.com";
 
 const SECTIONS = ["home", "announcements", "queues", "services", "events", "wintermaintenance", "pathways"];
 
@@ -74,6 +74,9 @@ socket.addEventListener("message", (event) => {
 	const data = JSON.parse(event.data);
 	console.log("Message", data);
 	if (data[0] === "announcements") {
+		if (announcementData.length !== 0) {
+            new Notification(data[1].at(-1).title);
+        }
 		announcementData = data[1];
 		loadAnnouncements();
 	}
