@@ -3,6 +3,7 @@
   "scripts": {
     "start": "node server.js"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/martendo/yrhacks-2023.git"
@@ -12,6 +13,7 @@
   },
   "homepage": "https://github.com/martendo/yrhacks-2023",
   "dependencies": {
+    "chatgpt": "^5.0.6",
     "ws": "^8.12.1"
   },
   "optionalDependencies": {

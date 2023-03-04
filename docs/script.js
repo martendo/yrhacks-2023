@@ -103,6 +103,11 @@ socket.addEventListener("message", (event) => {
 		case "queue-turn":
 			document.getElementById("queueTurnModal").style.display = "grid";
 			break;
+		case "chat-response":
+			const message = document.createElement("p");
+			message.innerHTML = `<strong>Assistant</strong><br>${data[1]}`;
+			document.getElementById("chatMessageBox").appendChild(message);
+			break;
 	}
 });
 
@@ -111,4 +116,12 @@ document.getElementById("enqueue").addEventListener("click", () => {
 		name: document.getElementById("userName").value,
 		contact: document.getElementById("userContact").value,
 	}]));
+});
+
+document.getElementById("chatSend").addEventListener("click", () => {
+	const content = document.getElementById("chatInput").value;
+	socket.send(JSON.stringify(["chat-message", content]));
+	const message = document.createElement("p");
+	message.innerHTML = `<strong>You</strong><br>${content}`;
+	document.getElementById("chatMessageBox").appendChild(message);
 });
