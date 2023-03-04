@@ -25,7 +25,7 @@ function loadAnnouncements() {
 			data = announcementData.reverse();
 			break;
 		case "1":
-			data = announcementData.copy();
+			data = announcementData.slice();
 			break;
 		case "2":
 			data = announcementData.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
