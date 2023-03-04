@@ -54,6 +54,7 @@ body > div {
 
 section {
 	display: none;
+	height: 100%;
 }
 
 #homeSection {

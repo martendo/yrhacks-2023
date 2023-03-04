@@ -1,6 +1,6 @@
 "use strict";
 
-const SECTIONS = ["announcements", "queues", "services", "events"];
+const SECTIONS = ["announcements", "queues", "services", "events", "wintermaintenance", "pathways"];
 
 let currentSection = "home";
 
