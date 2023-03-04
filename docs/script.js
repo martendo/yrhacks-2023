@@ -23,7 +23,10 @@ function displayQueue() {
 	}
 	for (const user of queue) {
 		const li = document.createElement("li");
-		li.textContent = `${user.name} (${user.contact})`;
+		li.textContent = user.name;
+		if (user.contact.length !== 0) {
+			li.textContent += `(${user.contact})`;
+		}
 		ol.appendChild(li);
 	}
 }
