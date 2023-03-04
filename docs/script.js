@@ -3,7 +3,7 @@
 //const WSS_URL = "ws://localhost:3000";
 const WSS_URL = "wss://markham-yrhacks-2023.herokuapp.com";
 
-const SECTIONS = ["home", "announcements", "queues", "services", "events", "wintermaintenance", "pathways"];
+const SECTIONS = ["home", "announcements", "queues", "services", "events", "wintermaintenance", "pathways", "moreresources"];
 
 let currentSection = "home";
 let announcementData = [];
