@@ -44,18 +44,21 @@ button:active {
 body {
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr);
-}
-
-body > div {
-	padding: 2em;
+	grid-template-rows: 100%;
 }
 
 #nav {
+	padding: 2em;
 	background-color: #C2EAFF;
 	filter: drop-shadow(8px 0px 5px #00000020);
+	grid-column: 1;
+	grid-row: 1;
 }
 #content {
+	padding: 2em;
 	background-color: #D4F0FF;
+	grid-column: 2;
+	grid-row: 1;
 }
 
 section {
