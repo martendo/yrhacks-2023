@@ -148,11 +148,9 @@ iframe {
 }
 
 #chatBox {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	right: 0;
-	width: 15em;
-	height: 20em;
 	padding: 1em;
 	margin: 2.5em;
 	display: grid;
@@ -167,6 +165,7 @@ iframe {
 #chatMessageBox {
 	grid-column: 1 / 3;
 	overflow-y: auto;
+	height: 16em;
 }
 #chatMessageBox > p {
 	background-color: #D4F0FF;
@@ -180,6 +179,7 @@ iframe {
 }
 textarea {
 	font-family: inherit;
+	padding: 0.5em;
 }
 #chatSend {
 	margin-bottom: 0;
