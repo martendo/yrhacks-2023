@@ -93,6 +93,10 @@ socket.addEventListener("message", (event) => {
 	console.log("Message", data);
 	switch (data[0]) {
 		case "announcements":
+			if (announcementData.length !== 0) {
+				document.getElementById("newAnnouncement").innerHTML = `"${data[1][data[1].length - 1].title}" &mdash; go take a look!`;
+				document.getElementById("announcementModal").style.display = "grid";
+			}
 			announcementData = data[1];
 			loadAnnouncements();
 			break;
