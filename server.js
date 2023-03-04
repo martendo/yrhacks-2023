@@ -47,7 +47,7 @@ function broadcastAnnouncements() {
 }
 
 function broadcastQueue() {
-	const userqueue = []
+	const userqueue = [];
 	for (const user of queue) {
 		userqueue.push(user[0]);
 	}
@@ -103,4 +103,9 @@ wss.on("connection", (socket) => {
 		}
 	});
 	client.send(["announcements", announcements]);
+	const userqueue = [];
+	for (const user of queue) {
+		userqueue.push(user[0]);
+	}
+	client.send(["queued", userqueue]);
 });
