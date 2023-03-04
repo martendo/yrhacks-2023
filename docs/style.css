@@ -181,3 +181,16 @@ iframe {
 textarea {
 	font-family: inherit;
 }
+#chatSend {
+	margin-bottom: 0;
+	margin-left: 0.8em;
+}
+#chatInput {
+	border: none;
+	background-color: #C2EAFF;
+	color: black;
+	filter:
+	drop-shadow(3px 3px 1px #9DC4D9)
+	drop-shadow(-1px 2px 1px #9DC4D9)
+	drop-shadow(2px -1px 1px #9DC4D9)
+}
