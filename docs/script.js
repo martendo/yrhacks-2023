@@ -76,8 +76,33 @@ socket.addEventListener("message", (event) => {
 	if (data[0] === "announcements") {
 		if (announcementData.length !== 0) {
             new Notification(data[1].at(-1).title);
+			registerServiceWorker();
+			initializePushNotifications().then(function(consent){
+				if (consent === 'granted') {
+					sendNotification();
+				}
+			});
         }
 		announcementData = data[1];
 		loadAnnouncements();
 	}
 });
+
+function initializePushNotifications() {
+	// request user grant to show notification
+	return Notification.requestPermission(function(result) {
+		return result;
+	});
+}
+
+function sendNotification(title) {
+	const text = "New announcement from Markham Connect!";
+	const options = {
+		body: text,
+		vibrate: [200, 100, 200],
+		tag: "new-product"
+	};
+	navigator.serviceWorker.ready.then(function(serviceWorker) {
+		serviceWorker.showNotification(title, options);
+	});
+}
