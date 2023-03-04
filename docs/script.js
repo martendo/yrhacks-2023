@@ -1,7 +1,7 @@
 "use strict";
 
 //const WSS_URL = "ws://localhost:3000";
-const WSS_URL = "https://markham-yrhacks-2023.herokuapp.com";
+const WSS_URL = "wss://markham-yrhacks-2023.herokuapp.com";
 
 const SECTIONS = ["home", "announcements", "queues", "services", "events", "wintermaintenance", "pathways"];
 
