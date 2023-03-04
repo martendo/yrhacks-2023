@@ -75,3 +75,22 @@ iframe {
 	width: 100%;
 	height: 80%;
 }
+
+#announcements > div {
+	background-color: #B4DDF1;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-top: 1.2em;
+	padding-bottom: 1.2em;
+	margin-top: 2em;
+}
+
+#announcements > div > h2 {
+	font-size: 1.3em;
+}
+
+.datetime {
+	font-size: 0.8em;
+	margin-top: -0.8em;
+	color: #455863;
+}
