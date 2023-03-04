@@ -41,8 +41,17 @@
 			</section>
 			<section id="queuesSection">
 				<h1>Virtual Queues</h1>
-				<p><label for="userName">Name: </label><input type="text" id="userName"></p>
-				<p><label for="userContact">Contact: </label><input type="text" id="userContact"></p>
+				<table>
+					<tr>
+						<td><label for="userName">Name:</label></td>
+						<td><input type="text" id="userName"></td>
+					</tr>
+					<tr>
+						<td><label for="userContact">Contact:</label></td>
+						<td><input type="text" id="userContact"></td>
+					</tr>
+				</table>
+				<br>
 				<button id="enqueue">Join Queue</button>
 				<ol id="queue"></ol>
 			</section>
@@ -65,12 +74,25 @@
 				<h1>Upcoming Events</h1>
 				<iframe src="https://www.todocanada.ca/city/toronto/york-events/" title="events"></iframe>
 			</section>
+			<div id="chatBox">
+				<div id="chatMessageBox"></div>
+				<textarea id="chatInput" placeholder="Ask anything..."></textarea><button id="chatSend">Send</button>
+			</div>
 		</div>
 		<div id="queueTurnModal" class="modal">
 			<div class="modalContent">
 				<div class="modalHeader"><h1>It's your turn!</h1></div>
 				<div class="modalFooter">
 					<button id="queueTurnModalOk">OK</button>
+				</div>
+			</div>
+		</div>
+		<div id="announcementModal" class="modal">
+			<div class="modalContent">
+				<div class="modalHeader"><h1>New Announcement!</h1></div>
+				<div class="modalBody" id="newAnnouncement"></div>
+				<div class="modalFooter">
+					<button id="announcementModalOk">OK</button>
 				</div>
 			</div>
 		</div>

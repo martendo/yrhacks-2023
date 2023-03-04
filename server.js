@@ -1,4 +1,9 @@
-const WebSocket = require("ws");
+import { WebSocketServer } from "ws";
+import { ChatGPTUnofficialProxyAPI } from "chatgpt";
+
+const api = new ChatGPTUnofficialProxyAPI({
+	accessToken: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJkYW51YmNvZGluZ0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZ2VvaXBfY291bnRyeSI6IkNBIn0sImh0dHBzOi8vYXBpLm9wZW5haS5jb20vYXV0aCI6eyJ1c2VyX2lkIjoidXNlci1VNUIxWkpmN01yOVFYTGx2cWllTGx2aXEifSwiaXNzIjoiaHR0cHM6Ly9hdXRoMC5vcGVuYWkuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTE1NDUyOTE4NjAzNzE3NDg0NTMzIiwiYXVkIjpbImh0dHBzOi8vYXBpLm9wZW5haS5jb20vdjEiLCJodHRwczovL29wZW5haS5vcGVuYWkuYXV0aDBhcHAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY3Nzg5NTE5MiwiZXhwIjoxNjc5MTA0NzkyLCJhenAiOiJUZEpJY2JlMTZXb1RIdE45NW55eXdoNUU0eU9vNkl0RyIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgbW9kZWwucmVhZCBtb2RlbC5yZXF1ZXN0IG9yZ2FuaXphdGlvbi5yZWFkIG9mZmxpbmVfYWNjZXNzIn0.xc4fXSVdmqL3HfJz0kDysso4iY_ycLffPR8Z4v_XzXBH0eIdOnHRz5s9K1NfFUANIRn98K1l-xJrMhJOTFtuGhK7uIWuULKS9X9AQb92hDeJWNoMI-26Zswam00w-sVPIHpPP8IpYmztMafBBKfbfv15zGz3mufAdcL3KJsgYgLADIY2GxrxOKKXlIh24uRX5HjNKBUWfeVE1NMc6VRrCK1Xuhra2Bs3odZDvJjvEkY5ZA_AdlOHWp51wPG8d9DCyhMEyMynaD1WS3Sg3_O9CSH_7pW6swuM14VlMszm7uhrKPBv5RVBy5q7ptWMGjhpOFXbZBAMIXFJesaLzp4tcw",
+});
 
 const defannouncements = [
 	// ChatGPT wrote the announcements lol, can't be bothered
@@ -23,12 +28,14 @@ const defannouncements = [
 ];
 let announcements = defannouncements.slice();
 
-const wss = new WebSocket.Server({port: process.env.PORT || 3000});
+const wss = new WebSocketServer({port: process.env.PORT || 3000});
 
 class Client {
 	constructor(connection) {
 		this.connection = connection;
 		this.isAlive = true;
+		this.lastId = null;
+		this.convId = null;
 	}
 
 	send(data) {
@@ -54,6 +61,21 @@ function broadcastQueue() {
 	for (const client of clients) {
 		client.send(["queued", userqueue]);
 	}
+}
+
+async function askGPT(client, prompt) {
+	let res;
+	if (client.lastId !== null && client.convId !== null) {
+		res = await api.sendMessage(prompt, {
+			parentMessageId: client.lastId,
+			conversationId: client.convId,
+		});
+	} else {
+		res = await api.sendMessage(prompt);
+	}
+	client.lastId = res.id;
+	client.convId = res.conversationId;
+	client.send(["chat-response", res.text]);
 }
 
 wss.on("connection", (socket) => {
@@ -99,6 +121,9 @@ wss.on("connection", (socket) => {
 				const user = queue.shift();
 				broadcastQueue();
 				user[1].send(["queue-turn"]);
+				break;
+			case "chat-message":
+				askGPT(client, "Markham " + data[1]);
 				break;
 		}
 	});

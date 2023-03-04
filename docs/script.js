@@ -25,7 +25,7 @@ function displayQueue() {
 		const li = document.createElement("li");
 		li.textContent = user.name;
 		if (user.contact.length !== 0) {
-			li.textContent += `(${user.contact})`;
+			li.textContent += ` (${user.contact})`;
 		}
 		ol.appendChild(li);
 	}
@@ -93,6 +93,10 @@ socket.addEventListener("message", (event) => {
 	console.log("Message", data);
 	switch (data[0]) {
 		case "announcements":
+			if (announcementData.length !== 0) {
+				document.getElementById("newAnnouncement").innerHTML = `"${data[1][data[1].length - 1].title}" &mdash; go take a look!`;
+				document.getElementById("announcementModal").style.display = "grid";
+			}
 			announcementData = data[1];
 			loadAnnouncements();
 			break;
@@ -103,6 +107,11 @@ socket.addEventListener("message", (event) => {
 		case "queue-turn":
 			document.getElementById("queueTurnModal").style.display = "grid";
 			break;
+		case "chat-response":
+			const message = document.createElement("p");
+			message.innerHTML = `<strong>Assistant</strong><br>${data[1]}`;
+			document.getElementById("chatMessageBox").appendChild(message);
+			break;
 	}
 });
 
@@ -111,4 +120,12 @@ document.getElementById("enqueue").addEventListener("click", () => {
 		name: document.getElementById("userName").value,
 		contact: document.getElementById("userContact").value,
 	}]));
+});
+
+document.getElementById("chatSend").addEventListener("click", () => {
+	const content = document.getElementById("chatInput").value;
+	socket.send(JSON.stringify(["chat-message", content]));
+	const message = document.createElement("p");
+	message.innerHTML = `<strong>You</strong><br>${content}`;
+	document.getElementById("chatMessageBox").appendChild(message);
 });
