@@ -156,7 +156,7 @@ iframe {
 	position: fixed;
 	bottom: 0;
 	right: 0;
-	padding: 1em;
+	width: 20em;
 	margin: 2.5em;
 	display: grid;
 	grid-template-rows: minmax(0, 1fr) auto;
@@ -175,25 +175,35 @@ iframe {
 #chatMessageBox > p {
 	background-color: #D4F0FF;
 	padding: 0.5em;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
+	margin-left: 2em;
+	margin-right: 2em;
 	filter:
 	drop-shadow(3px 3px 1px #9DC4D9)
 	drop-shadow(-1px 2px 1px #9DC4D9)
 	drop-shadow(2px -1px 1px #9DC4D9)
+}
+#chatBox > h2 {
+	background-color: #002b42;
+	color: #ffffff;
+	padding: 0.5em;
+	margin-top: -0.5em;
+	width: 19em;
 }
 textarea {
 	font-family: inherit;
 	padding: 0.5em;
 }
 #chatSend {
-	margin-bottom: 0;
+	margin-bottom: 1em;
+	margin-right: 0.8em;
 	margin-left: 0.8em;
 }
 #chatInput {
 	border: none;
 	background-color: #C2EAFF;
 	color: black;
+	margin-bottom: 1em;
+	margin-left: 0.8em;
 	filter:
 	drop-shadow(3px 3px 1px #9DC4D9)
 	drop-shadow(-1px 2px 1px #9DC4D9)
