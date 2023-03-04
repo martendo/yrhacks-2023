@@ -1,6 +1,6 @@
 const WebSocket = require("ws");
 
-const announcements = [
+const defannouncements = [
 	// ChatGPT wrote the announcements lol, can't be bothered
 	{
 		"date": "Jan 1, 2023",
@@ -21,6 +21,7 @@ const announcements = [
 		"content": "Now, the event is starting! YRHacks 2023, the annual hackathon held in Markham, Ontario, by the York Region District School Board (YRDSB), has officially begun. Students from around the world are gearing up for a weekend of collaboration, learning, and innovation. With a focus on creativity and problem-solving, participants will work in teams to develop new projects in a variety of fields, from software development to artificial intelligence. The hackathon is an excellent opportunity for young people to challenge themselves, learn new skills, and connect with industry experts. Whether attending in-person or virtually, YRHacks 2023 is sure to be an exciting and rewarding experience for all involved."
 	}
 ];
+let announcements = defannouncements.slice();
 
 const wss = new WebSocket.Server({port: process.env.PORT || 3000});
 
@@ -40,11 +41,19 @@ wss.on("connection", (socket) => {
 	socket.on("message", (message) => {
 		const data = JSON.parse(message);
 		console.log("Message", data);
-		if (data[0] === "new-announcement") {
-			announcements.push(data[1]);
-			for (const client of clients) {
-				client.send(JSON.stringify(["announcements", announcements]));
-			}
+		switch (data[0]) {
+			case "new-announcement":
+				announcements.push(data[1]);
+				for (const client of clients) {
+					client.send(JSON.stringify(["announcements", announcements]));
+				}
+				break;
+			case "reset-announcements":
+				announcements = defannouncements.slice();
+				for (const client of clients) {
+					client.send(JSON.stringify(["announcements", announcements]));
+				}
+				break;
 		}
 	});
 	socket.send(JSON.stringify(["announcements", announcements]));
