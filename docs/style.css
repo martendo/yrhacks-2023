@@ -214,3 +214,12 @@ textarea {
 #banner {
 	text-align: match-parent;
 }
+
+#queuesTable {
+	border-collapse: collapse;
+}
+#queuesTable td {
+	border: 1px solid black;
+	padding: 0.5em;
+	vertical-align: top;
+}

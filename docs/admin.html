@@ -10,6 +10,11 @@
 		<button id="reset">Reset All</button><br>
 		<br>
 		<p>Queues</p>
+		<select id="queueName">
+			<option value="Butcher Shop">Butcher Shop</option>
+			<option value="Haircuts">Haircuts</option>
+			<option value="Library">Library</option>
+		</select>
 		<button id="pop">Pop Queue</button>
 		<script>
 			"use strict";
@@ -38,7 +43,7 @@
 					socket.send(JSON.stringify(["reset-announcements"]));
 				});
 				document.getElementById("pop").addEventListener("click", () => {
-					socket.send(JSON.stringify(["queue-pop"]));
+					socket.send(JSON.stringify(["queue-pop", document.getElementById("queueName").value]));
 				});
 			});
 			socket.addEventListener("message", (event) => {
