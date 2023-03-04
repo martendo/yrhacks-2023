@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 	<head>
 		<title>Markham Connect</title>
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
 		<div id="nav">
+			<div id="google_translate_element"></div>
 			<ul>
 				<li><button id="homeButton">Home</button></li>
 				<li><button id="announcementsButton">Announcements</button></li>
@@ -53,5 +54,11 @@
 			</section>
 		</div>
 		<script src="script.js"></script>
+		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+		<script type="text/javascript">
+			function googleTranslateElementInit() {
+				new google.translate.TranslateElement({pageLanguage: "en", layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, "google_translate_element");
+			}
+		</script>
 	</body>
 </html>
