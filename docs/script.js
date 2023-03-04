@@ -58,7 +58,6 @@ for (const name of SECTIONS) {
 }
 
 document.getElementById("announcementSortOrder").addEventListener("change", loadAnnouncements);
-document.getElementById("announcementRefresh").addEventListener("change", loadAnnouncements);
 
 const socket = new WebSocket(WSS_URL);
 socket.addEventListener("error", (event) => {
