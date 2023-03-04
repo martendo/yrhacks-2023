@@ -19,16 +19,15 @@ function loadAnnouncements() {
 	let order = document.getElementById("announcementSortOrder");
 	announcements.innerHTML = "";
 
-	let data;
+	let data = announcementData.slice();
 	switch (order.options[order.selectedIndex].value) {
 		case "0":
-			data = announcementData.reverse();
+			data.reverse();
 			break;
 		case "1":
-			data = announcementData.slice();
 			break;
 		case "2":
-			data = announcementData.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
+			data.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0));
 			break;
 	}
 
