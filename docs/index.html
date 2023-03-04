@@ -32,8 +32,8 @@
 			</section>
 			<section id="queuesSection">
 				<h1>Virtual Queues</h1>
-				<p>Your ID: <span id="userID"></span></p>
-				<p><label for="userName">Name: </label><input type="text", id="userName"></p>
+				<p><label for="userName">Name: </label><input type="text" id="userName"></p>
+				<p><label for="userContact">Contact: </label><input type="text" id="userContact"></p>
 				<button id="enqueue">Join Queue</button>
 				<ol id="queue"></ol>
 			</section>
@@ -56,6 +56,14 @@
 				<h1>Upcoming Events</h1>
 				<iframe src="https://www.todocanada.ca/city/toronto/york-events/" title="events"></iframe>
 			</section>
+		</div>
+		<div id="queueTurnModal" class="modal">
+			<div class="modalContent">
+				<div class="modalHeader"><h1>It's your turn!</h1></div>
+				<div class="modalFooter">
+					<button id="queueTurnModalOk">OK</button>
+				</div>
+			</div>
 		</div>
 		<script src="script.js"></script>
 		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

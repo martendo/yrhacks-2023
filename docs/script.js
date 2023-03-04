@@ -23,7 +23,7 @@ function displayQueue() {
 	}
 	for (const user of queue) {
 		const li = document.createElement("li");
-		li.textContent = user.name;
+		li.textContent = `${user.name} (${user.contact})`;
 		ol.appendChild(li);
 	}
 }
@@ -71,6 +71,9 @@ for (const name of SECTIONS) {
 }
 
 document.getElementById("announcementSortOrder").addEventListener("change", loadAnnouncements);
+document.getElementById("queueTurnModalOk").addEventListener("click", () => {
+	document.getElementById("queueTurnModal").style.display = "none";
+});
 
 const socket = new WebSocket(WSS_URL);
 socket.addEventListener("error", (event) => {
@@ -94,11 +97,15 @@ socket.addEventListener("message", (event) => {
 			queue = data[1];
 			displayQueue();
 			break;
+		case "queue-turn":
+			document.getElementById("queueTurnModal").style.display = "grid";
+			break;
 	}
 });
 
 document.getElementById("enqueue").addEventListener("click", () => {
 	socket.send(JSON.stringify(["enqueue", {
 		name: document.getElementById("userName").value,
+		contact: document.getElementById("userContact").value,
 	}]));
 });
