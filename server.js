@@ -45,7 +45,11 @@ class Client {
 
 const clients = new Set();
 
-const queue = [];
+const queues = {
+	"Butcher Shop": [],
+	"Haircuts": [],
+	"Library": [],
+};
 
 function broadcastAnnouncements() {
 	for (const client of clients) {
@@ -53,13 +57,17 @@ function broadcastAnnouncements() {
 	}
 }
 
-function broadcastQueue() {
-	const userqueue = [];
-	for (const user of queue) {
-		userqueue.push(user[0]);
+function broadcastQueues() {
+	const userqueues = {};
+	for (const [name, queue] of Object.entries(queues)) {
+		const userqueue = [];
+		for (const user of queue) {
+			userqueue.push(user[0]);
+		}
+		userqueues[name] = userqueue;
 	}
 	for (const client of clients) {
-		client.send(["queued", userqueue]);
+		client.send(["queued", userqueues]);
 	}
 }
 
@@ -94,7 +102,7 @@ wss.on("connection", (socket) => {
 		}
 		client.isAlive = false;
 		socket.ping();
-	}, 10000);
+	}, 1000);
 	socket.on("close", (code) => {
 		clients.delete(socket);
 		clearInterval(interval);
@@ -114,12 +122,12 @@ wss.on("connection", (socket) => {
 				broadcastAnnouncements();
 				break;
 			case "enqueue":
-				queue.push([data[1], client]);
-				broadcastQueue();
+				queues[data[1]].push([data[2], client]);
+				broadcastQueues();
 				break;
 			case "queue-pop":
-				const user = queue.shift();
-				broadcastQueue();
+				const user = queues[data[1]].shift();
+				broadcastQueues();
 				user[1].send(["queue-turn"]);
 				break;
 			case "chat-message":
@@ -128,9 +136,13 @@ wss.on("connection", (socket) => {
 		}
 	});
 	client.send(["announcements", announcements]);
-	const userqueue = [];
-	for (const user of queue) {
-		userqueue.push(user[0]);
+	const userqueues = {};
+	for (const [name, queue] of Object.entries(queues)) {
+		const userqueue = [];
+		for (const user of queue) {
+			userqueue.push(user[0]);
+		}
+		userqueues[name] = userqueue;
 	}
-	client.send(["queued", userqueue]);
+	client.send(["queued", userqueues]);
 });

@@ -8,7 +8,7 @@ const SECTIONS = ["home", "announcements", "queues", "services", "events", "wint
 let currentSection = "home";
 let announcementData = [];
 
-let queue = [];
+let queues = {};
 
 function switchSection(name) {
 	document.getElementById(currentSection + "Section").style.display = "none";
@@ -16,18 +16,33 @@ function switchSection(name) {
 	currentSection = name;
 }
 
-function displayQueue() {
-	const ol = document.getElementById("queue");
-	while (ol.firstChild) {
-		ol.removeChild(ol.lastChild);
+function displayQueues() {
+	const tbody = document.getElementById("queues");
+	while (tbody.firstChild) {
+		tbody.removeChild(tbody.lastChild);
 	}
-	for (const user of queue) {
-		const li = document.createElement("li");
-		li.textContent = user.name;
-		if (user.contact.length !== 0) {
-			li.textContent += ` (${user.contact})`;
+	const queueNames = document.getElementById("queueName");
+	while (queueNames.firstChild) {
+		queueNames.removeChild(queueNames.lastChild);
+	}
+	const namerow = tbody.insertRow();
+	const listrow = tbody.insertRow();
+	for (const [name, queue] of Object.entries(queues)) {
+		const option = document.createElement("option");
+		option.textContent = name;
+		option.value = name;
+		queueNames.appendChild(option);
+		const ol = document.createElement("ol");
+		for (const user of queue) {
+			const li = document.createElement("li");
+			li.textContent = user.name;
+			if (user.contact.length !== 0) {
+				li.textContent += ` (${user.contact})`;
+			}
+			ol.appendChild(li);
 		}
-		ol.appendChild(li);
+		namerow.insertCell().innerHTML = `<b>${name}</b>`;
+		listrow.insertCell().appendChild(ol);
 	}
 }
 
@@ -101,8 +116,8 @@ socket.addEventListener("message", (event) => {
 			loadAnnouncements();
 			break;
 		case "queued":
-			queue = data[1];
-			displayQueue();
+			queues = data[1];
+			displayQueues();
 			break;
 		case "queue-turn":
 			document.getElementById("queueTurnModal").style.display = "grid";
@@ -116,7 +131,7 @@ socket.addEventListener("message", (event) => {
 });
 
 document.getElementById("enqueue").addEventListener("click", () => {
-	socket.send(JSON.stringify(["enqueue", {
+	socket.send(JSON.stringify(["enqueue", document.getElementById("queueName").value, {
 		name: document.getElementById("userName").value,
 		contact: document.getElementById("userContact").value,
 	}]));
