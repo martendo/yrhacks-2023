@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		Date <input type="text" id="date"><br>
+		Time <input type="text" id="time"><br>
+		Title <input type="text" id="title"><br>
+		Content <textarea id="content"></textarea><br>
+		<button id="submit">Submit</button>
+		<script>
+			"use strict";
+
+			const WSS_URL = "wss://markham-yrhacks-2023.herokuapp.com";
+
+			const socket = new WebSocket(WSS_URL);
+			socket.addEventListener("error", (event) => {
+				console.error("WebSocket error", event);
+			});
+			socket.addEventListener("close", (event) => {
+				console.log("WebSocket closed");
+			});
+			socket.addEventListener("open", () => {
+				console.log("WebSocket opened");
+				document.getElementById("submit").addEventListener("click", () => {
+					socket.send(JSON.stringify(["new-announcement", {
+						date: document.getElementById("date").value,
+						time: document.getElementById("time").value,
+						title: document.getElementById("title").value,
+						content: document.getElementById("content").value,
+					}]));
+				});
+			});
+			socket.addEventListener("message", (event) => {
+				const data = JSON.parse(event.data);
+				console.log("Message", data);
+			});
+		</script>
+	</body>
+</html>

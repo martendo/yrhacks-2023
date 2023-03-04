@@ -40,6 +40,12 @@ wss.on("connection", (socket) => {
 	socket.on("message", (message) => {
 		const data = JSON.parse(message);
 		console.log("Message", data);
+		if (data[0] === "new-announcement") {
+			announcements.push(data[1]);
+			for (const client of clients) {
+				client.send(JSON.stringify(["announcements", announcements]));
+			}
+		}
 	});
 	socket.send(JSON.stringify(["announcements", announcements]));
 });
