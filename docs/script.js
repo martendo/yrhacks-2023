@@ -14,6 +14,8 @@ function switchSection(name) {
 	currentSection = name;
 }
 
+Notification.requestPermission();
+
 function loadAnnouncements() {
 	let announcements = document.getElementById("announcements");
 	let order = document.getElementById("announcementSortOrder");

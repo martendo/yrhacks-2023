@@ -25,16 +25,39 @@ let announcements = defannouncements.slice();
 
 const wss = new WebSocket.Server({port: process.env.PORT || 3000});
 
+class Client {
+	constructor(connection) {
+		this.connection = connection;
+		this.isAlive = true;
+	}
+
+	send(data) {
+		this.connection.send(JSON.stringify(data));
+	}
+}
+
 const clients = new Set();
 
 wss.on("connection", (socket) => {
 	console.log("Client connected");
-	clients.add(socket);
+	const client = new Client(socket);
+	clients.add(client);
 	socket.on("error", (error) => {
 		console.error(error);
 	});
+	socket.on("pong", () => {
+		client.isAlive = true;
+	});
+	const interval = setInterval(() => {
+		if (!client.isAlive) {
+			return socket.terminate();
+		}
+		client.isAlive = false;
+		socket.ping();
+	}, 10000);
 	socket.on("close", (code) => {
 		clients.delete(socket);
+		clearInterval(interval);
 		console.log(`Client disconnected (${code})`);
 		socket.close();
 	});
@@ -45,16 +68,16 @@ wss.on("connection", (socket) => {
 			case "new-announcement":
 				announcements.push(data[1]);
 				for (const client of clients) {
-					client.send(JSON.stringify(["announcements", announcements]));
+					client.send(["announcements", announcements]);
 				}
 				break;
 			case "reset-announcements":
 				announcements = defannouncements.slice();
 				for (const client of clients) {
-					client.send(JSON.stringify(["announcements", announcements]));
+					client.send(["announcements", announcements]);
 				}
 				break;
 		}
 	});
-	socket.send(JSON.stringify(["announcements", announcements]));
+	client.send(["announcements", announcements]);
 });
