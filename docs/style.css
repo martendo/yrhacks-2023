@@ -44,7 +44,7 @@ button:active {
 body {
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr);
-	grid-template-rows: 100%;
+	grid-template-rows: minmax(max-content, 100%);
 }
 
 #nav {
