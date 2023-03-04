@@ -24,6 +24,11 @@ h1 {
 	font-size: 1.75em;
 }
 
+.translation {
+	background-color: #002b42 !important;
+	color: #ffffff;
+}
+
 button {
 	border: none;
 	background-color: #B4DDF1;
@@ -145,4 +150,8 @@ iframe {
 	overflow-x: auto;
 	overflow-y: auto;
 	line-height: 1.6;
+}
+
+#banner {
+	text-align: match-parent;
 }
