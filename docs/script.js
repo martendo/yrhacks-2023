@@ -25,7 +25,7 @@ function displayQueue() {
 		const li = document.createElement("li");
 		li.textContent = user.name;
 		if (user.contact.length !== 0) {
-			li.textContent += `(${user.contact})`;
+			li.textContent += ` (${user.contact})`;
 		}
 		ol.appendChild(li);
 	}
