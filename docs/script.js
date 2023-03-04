@@ -60,7 +60,7 @@ function loadAnnouncements() {
 			announcements.appendChild(box);
 		}
 	});
-	req.open("GET", "http://localhost:3000");
-	// req.open("GET", "https://markham-yrhacks-2023.herokuapp.com");
+	// req.open("GET", "http://localhost:3000");
+	req.open("GET", "https://markham-yrhacks-2023.herokuapp.com");
 	req.send();
 }
