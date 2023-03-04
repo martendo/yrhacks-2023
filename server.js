@@ -38,6 +38,24 @@ class Client {
 
 const clients = new Set();
 
+const queue = [];
+
+function broadcastAnnouncements() {
+	for (const client of clients) {
+		client.send(["announcements", announcements]);
+	}
+}
+
+function broadcastQueue() {
+	const userqueue = []
+	for (const user of queue) {
+		userqueue.push(user[0]);
+	}
+	for (const client of clients) {
+		client.send(["queued", userqueue]);
+	}
+}
+
 wss.on("connection", (socket) => {
 	console.log("Client connected");
 	const client = new Client(socket);
@@ -67,15 +85,20 @@ wss.on("connection", (socket) => {
 		switch (data[0]) {
 			case "new-announcement":
 				announcements.push(data[1]);
-				for (const client of clients) {
-					client.send(["announcements", announcements]);
-				}
+				broadcastAnnouncements();
 				break;
 			case "reset-announcements":
 				announcements = defannouncements.slice();
-				for (const client of clients) {
-					client.send(["announcements", announcements]);
-				}
+				broadcastAnnouncements();
+				break;
+			case "enqueue":
+				queue.push([data[1], client]);
+				broadcastQueue();
+				break;
+			case "queue-pop":
+				const user = queue.shift();
+				broadcastQueue();
+				user[1].send(["queue-turn"]);
 				break;
 		}
 	});

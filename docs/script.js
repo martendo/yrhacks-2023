@@ -1,12 +1,14 @@
 "use strict";
 
-// const WSS_URL = "ws://localhost:3000";
-const WSS_URL = "wss://markham-yrhacks-2023.herokuapp.com";
+const WSS_URL = "ws://localhost:3000";
+//const WSS_URL = "wss://markham-yrhacks-2023.herokuapp.com";
 
 const SECTIONS = ["home", "announcements", "queues", "services", "events", "wintermaintenance", "pathways"];
 
 let currentSection = "home";
 let announcementData = [];
+
+let queue = [];
 
 function switchSection(name) {
 	document.getElementById(currentSection + "Section").style.display = "none";
@@ -14,7 +16,17 @@ function switchSection(name) {
 	currentSection = name;
 }
 
-Notification.requestPermission();
+function displayQueue() {
+	const ol = document.getElementById("queue");
+	while (ol.firstChild) {
+		ol.removeChild(ol.lastChild);
+	}
+	for (const user of queue) {
+		const li = document.createElement("li");
+		li.textContent = user.name;
+		ol.appendChild(li);
+	}
+}
 
 function loadAnnouncements() {
 	let announcements = document.getElementById("announcements");
@@ -73,11 +85,20 @@ socket.addEventListener("open", () => {
 socket.addEventListener("message", (event) => {
 	const data = JSON.parse(event.data);
 	console.log("Message", data);
-	if (data[0] === "announcements") {
-		if (announcementData.length !== 0) {
-            new Notification(data[1].at(-1).title);
-        }
-		announcementData = data[1];
-		loadAnnouncements();
+	switch (data[0]) {
+		case "announcements":
+			announcementData = data[1];
+			loadAnnouncements();
+			break;
+		case "queued":
+			queue = data[1];
+			displayQueue();
+			break;
 	}
+});
+
+document.getElementById("enqueue").addEventListener("click", () => {
+	socket.send(JSON.stringify(["enqueue", {
+		name: document.getElementById("userName").value,
+	}]));
 });
